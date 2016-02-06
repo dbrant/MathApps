@@ -22,22 +22,22 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.Label2 = New System.Windows.Forms.Label
-        Me.udIterations = New System.Windows.Forms.NumericUpDown
-        Me.udLineSize = New System.Windows.Forms.NumericUpDown
-        Me.cmdLeft = New System.Windows.Forms.Button
-        Me.cmdRight = New System.Windows.Forms.Button
-        Me.cmdUp = New System.Windows.Forms.Button
-        Me.cmdDown = New System.Windows.Forms.Button
+        Me.components = New System.ComponentModel.Container()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.udIterations = New System.Windows.Forms.NumericUpDown()
+        Me.udLineSize = New System.Windows.Forms.NumericUpDown()
+        Me.cmdLeft = New System.Windows.Forms.Button()
+        Me.cmdRight = New System.Windows.Forms.Button()
+        Me.cmdUp = New System.Windows.Forms.Button()
+        Me.cmdDown = New System.Windows.Forms.Button()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.ColorDialog1 = New System.Windows.Forms.ColorDialog
-        Me.lblBackColor = New System.Windows.Forms.Label
-        Me.lblForeColor = New System.Windows.Forms.Label
-        Me.Label3 = New System.Windows.Forms.Label
-        Me.Label4 = New System.Windows.Forms.Label
+        Me.ColorDialog1 = New System.Windows.Forms.ColorDialog()
+        Me.lblBackColor = New System.Windows.Forms.Label()
+        Me.lblForeColor = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.udIterations, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.udLineSize, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -46,13 +46,13 @@ Partial Class Form1
         'PictureBox1
         '
         Me.PictureBox1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.PictureBox1.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PictureBox1.Location = New System.Drawing.Point(12, 64)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(427, 283)
+        Me.PictureBox1.Size = New System.Drawing.Size(597, 425)
         Me.PictureBox1.TabIndex = 0
         Me.PictureBox1.TabStop = False
         '
@@ -177,7 +177,7 @@ Partial Class Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(451, 359)
+        Me.ClientSize = New System.Drawing.Size(621, 501)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.lblForeColor)

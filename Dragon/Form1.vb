@@ -1,6 +1,6 @@
 Public Class Form1
 
-    'Copyright (c) 2009-2013 Dmitry Brant <me@dmitrybrant.com>
+    'Copyright (c) 2007 Dmitry Brant <me@dmitrybrant.com>
     '
     'This software is free software; you can redistribute it and/or modify
     'it under the terms of the GNU General Public License as published by
@@ -20,11 +20,11 @@ Public Class Form1
     Dim startX, startY
     Dim loaded As Boolean = False
 
-    Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+    Private Sub Form1_FormClosing(ByVal sender As Object, ByVal e As FormClosingEventArgs) Handles Me.FormClosing
         bmp = Nothing
     End Sub
 
-    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Private Sub Form1_Load(ByVal sender As Object, ByVal e As EventArgs) Handles MyBase.Load
         bmp = New Bitmap(PictureBox1.Width, PictureBox1.Width, Imaging.PixelFormat.Format32bppArgb)
         startX = PictureBox1.Width / 2
         startY = PictureBox1.Height / 2
@@ -32,7 +32,7 @@ Public Class Form1
         cmdDraw_Click(Nothing, Nothing)
     End Sub
 
-    Private Sub btnGo_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    Private Sub btnGo_Click(ByVal sender As Object, ByVal e As EventArgs)
         'recreate the bitmap
         bmp = Nothing
         If PictureBox1.Width <= 0 Then Exit Sub
@@ -62,7 +62,7 @@ Public Class Form1
     End Sub
 
 
-    Private Sub cmdDraw_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles udLineSize.ValueChanged, udIterations.ValueChanged
+    Private Sub cmdDraw_Click(ByVal sender As Object, ByVal e As EventArgs) Handles udLineSize.ValueChanged, udIterations.ValueChanged
         If Not loaded Then Exit Sub
 
         'recreate the bitmap
@@ -85,19 +85,19 @@ Public Class Form1
         If udLineSize.Value < 1 Then Exit Sub
 
         Me.Cursor = Cursors.WaitCursor
-        Dim poo(2 ^ (numIterations + 1)) As Boolean    'false = left, true = right
+        Dim steps(2 ^ (numIterations + 1)) As Boolean    'false = left, true = right
 
-        poo(0) = True
+        steps(0) = True
         curIndex = 1
 
         For i = 1 To numIterations
             'add a right turn
-            poo(curIndex) = True
+            steps(curIndex) = True
             tempIndex = curIndex - 1
             curIndex = curIndex + 1
             'then add the reverse of previous turns, in reverse order
             For j = tempIndex To 0 Step -1
-                poo(curIndex) = Not poo(j)
+                steps(curIndex) = Not steps(j)
                 curIndex = curIndex + 1
             Next
         Next
@@ -114,7 +114,7 @@ Public Class Form1
         direction = 0 '0=right, 1=down, 2=left, 3=up
 
         For i = 0 To curIndex - 1
-            If poo(i) Then 'move right
+            If steps(i) Then 'move right
                 If direction = 0 Then
                     direction = 1
                     y = y + moveLength
@@ -155,7 +155,7 @@ Public Class Form1
     End Sub
 
 
-    Private Sub cmdUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdUp.Click, cmdRight.Click, cmdLeft.Click, cmdDown.Click
+    Private Sub cmdUp_Click(ByVal sender As Object, ByVal e As EventArgs) Handles cmdUp.Click, cmdRight.Click, cmdLeft.Click, cmdDown.Click
         If sender.Equals(cmdUp) Then
             startY = startY - 50
         ElseIf sender.Equals(cmdDown) Then
@@ -168,16 +168,16 @@ Public Class Form1
         cmdDraw_Click(Nothing, Nothing)
     End Sub
 
-    Private Sub lblBackColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblBackColor.Click
+    Private Sub lblBackColor_Click(ByVal sender As Object, ByVal e As EventArgs) Handles lblBackColor.Click
         ColorDialog1.Color = lblBackColor.BackColor
-        If ColorDialog1.ShowDialog() <> Windows.Forms.DialogResult.OK Then Exit Sub
+        If ColorDialog1.ShowDialog() <> DialogResult.OK Then Exit Sub
         lblBackColor.BackColor = ColorDialog1.Color
         cmdDraw_Click(Nothing, Nothing)
     End Sub
 
-    Private Sub lblForeColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblForeColor.Click
+    Private Sub lblForeColor_Click(ByVal sender As Object, ByVal e As EventArgs) Handles lblForeColor.Click
         ColorDialog1.Color = lblForeColor.BackColor
-        If ColorDialog1.ShowDialog() <> Windows.Forms.DialogResult.OK Then Exit Sub
+        If ColorDialog1.ShowDialog() <> DialogResult.OK Then Exit Sub
         lblForeColor.BackColor = ColorDialog1.Color
         cmdDraw_Click(Nothing, Nothing)
     End Sub
