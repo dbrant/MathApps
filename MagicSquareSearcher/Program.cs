@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace ConsoleApplication2
+namespace MagicSquareFinder
 {
     class Program
     {
@@ -10,28 +9,22 @@ namespace ConsoleApplication2
         const int squaresToTest = 10;
 
         static long[] theSquare;
-        static int[] theSquareSeq;
+        static bool[] squareDirty;
         static long[] squareNumbers;
         static int squareLength;
-
-        static LinkedList<int> seqList;
 
         static void Main(string[] args)
         {
             
             squareLength = squareSize * squareSize;
             theSquare = new long[squareLength];
-            theSquareSeq = new int[squareLength];
             squareNumbers = new long[squaresToTest];
-            int newSeq;
-            bool done = false;
-
-            seqList = new LinkedList<int>();
+            squareDirty = new bool[squaresToTest];
 
             // precalculate squares
-            for (long i = 1; i <= squaresToTest; i++)
+            for (int i = 1; i <= squaresToTest; i++)
             {
-                squareNumbers[i - 1] = i;// * i;
+                squareNumbers[i - 1] = (long) i;// * i;
             }
 
             int ticks = Environment.TickCount;
@@ -45,33 +38,15 @@ namespace ConsoleApplication2
 
         private static void processCell(int cellIndex)
         {
-            bool nextSquare;
             for (int i = 0; i < squaresToTest; i++)
             {
-                nextSquare = false;
-                for (int c = 0; c < cellIndex; c++)
-                {
-                    if (theSquareSeq[c] == i)
-                    {
-                        nextSquare = true;
-                        break;
-                    }
-                }
-                if (nextSquare)
-                {
-                    continue;
-                }
+                if (squareDirty[i]) { continue; }
 
-                theSquareSeq[cellIndex] = i;
+                squareDirty[i] = true;
                 theSquare[cellIndex] = squareNumbers[i];
-
-                if (cellIndex < squareLength - 1)
-                {
-                    processCell(cellIndex + 1);
-                } else
-                {
-                    verifyMagicSquare();
-                }
+                if (cellIndex < squareLength - 1) { processCell(cellIndex + 1); }
+                else { verifyMagicSquare(); }
+                squareDirty[i] = false;
             }
         }
 
