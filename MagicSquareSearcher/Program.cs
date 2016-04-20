@@ -6,14 +6,16 @@ namespace MagicSquareFinder
     {
 
         const int squareSize = 3;
-        const int squaresToTest = 100;
+        const int numberCount = 1000;
 
         static long[] theSquare;
         static bool[] squareDirty;
-        static long[] squareNumbers;
+        static long[] numberPool;
         static int squareLength;
 
-        static long currentResult, tempResult, tempResult2;
+        static long currentResult;
+        static long val4, val5, val6, val7, val8;
+        static int ind4, ind5, ind6, ind7, ind8;
 
         static int ticks;
 
@@ -22,16 +24,18 @@ namespace MagicSquareFinder
             
             squareLength = squareSize * squareSize;
             theSquare = new long[squareLength];
-            squareNumbers = new long[squaresToTest];
-            squareDirty = new bool[squaresToTest];
+            numberPool = new long[numberCount];
+            squareDirty = new bool[numberCount];
 
             // precalculate squares
-            for (int i = 1; i <= squaresToTest; i++)
+            for (int i = 1; i <= numberCount; i++)
             {
-                squareNumbers[i - 1] = (long)i;// * (long)i;
+                numberPool[i - 1] = (long)i * (long)i;
             }
             
             processCell(0);
+
+            Console.WriteLine("Press any key...");
             Console.ReadKey();
         }
 
@@ -44,115 +48,115 @@ namespace MagicSquareFinder
                 ticks = Environment.TickCount;
                 printMagicSquare();
             }
-            
-            for (int i = 0; i < squaresToTest; i++)
+
+            if (cellIndex < 4)
             {
-                if (squareDirty[i]) { continue; }
+                for (int i = 0; i < numberCount; i++)
+                {
+                    if (squareDirty[i]) { continue; }
+                    theSquare[cellIndex] = numberPool[i];
 
-                theSquare[cellIndex] = squareNumbers[i];
-                if (cellIndex < squareLength - 1) {
-
-                    if (cellIndex == 2) {
+                    if (cellIndex == 2)
+                    {
                         currentResult = theSquare[0] + theSquare[1] + theSquare[2];
                     }
 
-                    if (cellIndex == 3)
-                    {
-                        if (theSquare[0] + theSquare[3] >= currentResult)
-                        {
-                            break;
-                        }
-                        squareDirty[i] = true;
-                        processCell(cellIndex + 1);
-                        squareDirty[i] = false;
-                    }
-                    else if (cellIndex == 4)
-                    {
-                        if (theSquare[1] + theSquare[4] >= currentResult
-                            || theSquare[3] + theSquare[4] >= currentResult
-                            || theSquare[0] + theSquare[4] >= currentResult
-                            || theSquare[2] + theSquare[4] >= currentResult)
-                        {
-                            break;
-                        }
-                        squareDirty[i] = true;
-                        processCell(cellIndex + 1);
-                        squareDirty[i] = false;
-                    }
-                    else if (cellIndex == 5)
-                    {
-                        tempResult = theSquare[3] + theSquare[4] + theSquare[5];
-                        if (tempResult > currentResult)
-                        {
-                            break;
-                        }
-                        else if (tempResult == currentResult)
-                        {
-                            squareDirty[i] = true;
-                            processCell(cellIndex + 1);
-                            squareDirty[i] = false;
-                        }
-                    }
-                    else if (cellIndex == 6)
-                    {
-                        tempResult = theSquare[0] + theSquare[3] + theSquare[6];
-                        tempResult2 = theSquare[2] + theSquare[4] + theSquare[6];
-                        if (tempResult > currentResult)
-                        {
-                            break;
-                        }
-                        else if (tempResult2 > currentResult)
-                        {
-                            break;
-                        }
-                        else if (tempResult == currentResult && tempResult2 == currentResult)
-                        {
-                            squareDirty[i] = true;
-                            processCell(cellIndex + 1);
-                            squareDirty[i] = false;
-                        }
-                    }
-                    else if (cellIndex == 7)
-                    {
-                        tempResult = theSquare[1] + theSquare[4] + theSquare[7];
-                        if (tempResult > currentResult)
-                        {
-                            break;
-                        }
-                        else if (tempResult == currentResult)
-                        {
-                            squareDirty[i] = true;
-                            processCell(cellIndex + 1);
-                            squareDirty[i] = false;
-                        }
-                    }
-                    else
-                    {
-                        squareDirty[i] = true;
-                        processCell(cellIndex + 1);
-                        squareDirty[i] = false;
-                    }
-
-
-                }
-                else {
-                    verifyMagicSquare();
+                    squareDirty[i] = true;
+                    processCell(cellIndex + 1);
+                    squareDirty[i] = false;
                 }
             }
+            else
+            {
+                // we're at the 5th cell, so we can construct the rest of the square!
+
+                val6 = currentResult - theSquare[0] - theSquare[3];
+                ind6 = indexOf(val6);
+                if (ind6 == -1 || squareDirty[ind6]) { return; }
+                theSquare[6] = val6;
+                squareDirty[ind6] = true;
+
+                val4 = currentResult - theSquare[6] - theSquare[2];
+                ind4 = indexOf(val4);
+                if (ind4 == -1 || squareDirty[ind4])
+                {
+                    squareDirty[ind6] = false;
+                    return;
+                }
+                theSquare[4] = val4;
+                squareDirty[ind4] = true;
+
+                val5 = currentResult - theSquare[4] - theSquare[3];
+                ind5 = indexOf(val5);
+                if (ind5 == -1 || squareDirty[ind5])
+                {
+                    squareDirty[ind4] = false;
+                    squareDirty[ind6] = false;
+                    return;
+                }
+                theSquare[5] = val5;
+                squareDirty[ind5] = true;
+
+                val7 = currentResult - theSquare[1] - theSquare[4];
+                ind7 = indexOf(val7);
+                if (ind7 == -1 || squareDirty[ind7])
+                {
+                    squareDirty[ind4] = false;
+                    squareDirty[ind5] = false;
+                    squareDirty[ind6] = false;
+                    return;
+                }
+                theSquare[7] = val7;
+                squareDirty[ind7] = true;
+
+                val8 = currentResult - theSquare[0] - theSquare[4];
+                ind8 = indexOf(val8);
+                if (ind8 == -1 || squareDirty[ind8])
+                {
+                    squareDirty[ind4] = false;
+                    squareDirty[ind5] = false;
+                    squareDirty[ind6] = false;
+                    squareDirty[ind7] = false;
+                    return;
+                }
+                theSquare[8] = val8;
+
+                verifyMagicSquare();
+
+                squareDirty[ind4] = false;
+                squareDirty[ind5] = false;
+                squareDirty[ind6] = false;
+                squareDirty[ind7] = false;
+            }
+            
         }
 
-
+        private static int indexOf(long val)
+        {
+            for (int i = 0; i < numberCount; i++)
+            {
+                if (numberPool[i] == val)
+                {
+                    return i;
+                }
+                else if (numberPool[i] > val)
+                {
+                    break;
+                }
+            }
+            return -1;
+        }
 
 
         private static void verifyMagicSquare()
         {
             if (currentResult != (theSquare[6] + theSquare[7] + theSquare[8])) { return; }
             if (currentResult != (theSquare[2] + theSquare[5] + theSquare[8])) { return; }
-            if (currentResult != (theSquare[0] + theSquare[4] + theSquare[8])) { return; }
 
             Console.WriteLine("----- Magic square found! -----");
             printMagicSquare();
-            Console.WriteLine("----------");
+            Console.WriteLine("----- Press any key to continue -----");
+            Console.ReadKey();
         }
 
         private static void printMagicSquare() {
