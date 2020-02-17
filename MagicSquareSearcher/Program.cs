@@ -14,6 +14,7 @@ namespace MagicSquareFinder
         static int squareLength;
 
         static long currentResult;
+        static int currentIndex0, currentIndex1;
         static long val4, val5, val6, val7, val8;
         static int ind4, ind5, ind6, ind7, ind8;
 
@@ -27,7 +28,7 @@ namespace MagicSquareFinder
             numberPool = new long[numberCount];
             squareDirty = new bool[numberCount];
 
-            // precalculate squares
+            // precalculate the number pool
             for (int i = 1; i <= numberCount; i++)
             {
                 numberPool[i - 1] = (long)i * (long)i;
@@ -51,12 +52,29 @@ namespace MagicSquareFinder
 
             if (cellIndex < 4)
             {
-                for (int i = 0; i < numberCount; i++)
+                int i = 0;
+                if (cellIndex == 2)
+                {
+                    i = currentIndex0 + 1;
+                }
+                else if (cellIndex == 3)
+                {
+                    i = currentIndex1 + 1;
+                }
+                for (; i < numberCount; i++)
                 {
                     if (squareDirty[i]) { continue; }
                     theSquare[cellIndex] = numberPool[i];
 
-                    if (cellIndex == 2)
+                    if (cellIndex == 0)
+                    {
+                        currentIndex0 = i;
+                    }
+                    else if (cellIndex == 1)
+                    {
+                        currentIndex1 = i;
+                    }
+                    else if (cellIndex == 2)
                     {
                         currentResult = theSquare[0] + theSquare[1] + theSquare[2];
                     }
@@ -76,21 +94,28 @@ namespace MagicSquareFinder
                 theSquare[6] = val6;
                 squareDirty[ind6] = true;
 
+
+
+
                 val4 = currentResult - theSquare[6] - theSquare[2];
-                ind4 = indexOf(val4);
-                if (ind4 == -1 || squareDirty[ind4])
+                
+                if (val4 <= 0 || val4 == theSquare[0] || val4 == theSquare[1] || val4 == theSquare[2] || val4 == theSquare[3] || val4 == theSquare[6])
                 {
                     squareDirty[ind6] = false;
                     return;
                 }
                 theSquare[4] = val4;
-                squareDirty[ind4] = true;
+
+                //squareDirty[ind4] = true;
+
+
+
 
                 val5 = currentResult - theSquare[4] - theSquare[3];
                 ind5 = indexOf(val5);
-                if (ind5 == -1 || squareDirty[ind5])
+                if (ind5 == -1 || squareDirty[ind5] || val5 == theSquare[4])
                 {
-                    squareDirty[ind4] = false;
+                    //squareDirty[ind4] = false;
                     squareDirty[ind6] = false;
                     return;
                 }
@@ -99,9 +124,9 @@ namespace MagicSquareFinder
 
                 val7 = currentResult - theSquare[1] - theSquare[4];
                 ind7 = indexOf(val7);
-                if (ind7 == -1 || squareDirty[ind7])
+                if (ind7 == -1 || squareDirty[ind7] || val7 == theSquare[4])
                 {
-                    squareDirty[ind4] = false;
+                    //squareDirty[ind4] = false;
                     squareDirty[ind5] = false;
                     squareDirty[ind6] = false;
                     return;
@@ -109,11 +134,16 @@ namespace MagicSquareFinder
                 theSquare[7] = val7;
                 squareDirty[ind7] = true;
 
+                Console.WriteLine("----- Almost: -----");
+                printMagicSquare();
+
+
                 val8 = currentResult - theSquare[0] - theSquare[4];
-                ind8 = indexOf(val8);
-                if (ind8 == -1 || squareDirty[ind8])
+                
+                if (val8 <= 0 || val8 == theSquare[0] || val8 == theSquare[1] || val8 == theSquare[2] || val8 == theSquare[3] || val8 == theSquare[4]
+                    || val8 == theSquare[5] || val8 == theSquare[6] || val8 == theSquare[7])
                 {
-                    squareDirty[ind4] = false;
+                    //squareDirty[ind4] = false;
                     squareDirty[ind5] = false;
                     squareDirty[ind6] = false;
                     squareDirty[ind7] = false;
@@ -123,7 +153,7 @@ namespace MagicSquareFinder
 
                 verifyMagicSquare();
 
-                squareDirty[ind4] = false;
+                //squareDirty[ind4] = false;
                 squareDirty[ind5] = false;
                 squareDirty[ind6] = false;
                 squareDirty[ind7] = false;
